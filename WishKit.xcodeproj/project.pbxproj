@@ -29,9 +29,35 @@
 		B28B781C2EB3D41B00591749 /* WishKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WishKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B28B78322EB3D5D900591749 /* Exceptions for "WishKit" folder in "WishKitTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				GeneratedMessageView.swift,
+				MessageHistoryView.swift,
+				MessageThemeView.swift,
+				PersonalInformationView.swift,
+				RoastMeView.swift,
+			);
+			target = B28B78112EB3D41B00591749 /* WishKitTests */;
+		};
+		B2D7C5082EB648B20069F457 /* Exceptions for "WishKit" folder in "WishKitUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				GeneratedMessageView.swift,
+				MessageHistoryView.swift,
+			);
+			target = B28B781B2EB3D41B00591749 /* WishKitUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B28B78072EB3D41A00591749 /* WishKit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B28B78322EB3D5D900591749 /* Exceptions for "WishKit" folder in "WishKitTests" target */,
+				B2D7C5082EB648B20069F457 /* Exceptions for "WishKit" folder in "WishKitUITests" target */,
+			);
 			path = WishKit;
 			sourceTree = "<group>";
 		};
@@ -395,6 +421,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Z6WV22X3W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -426,6 +453,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Z6WV22X3W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

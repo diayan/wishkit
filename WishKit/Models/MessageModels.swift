@@ -1,0 +1,89 @@
+//
+//  MessageModels.swift
+//  WishKit
+//
+//  Created by diayan siat on 02/11/2025.
+//
+
+import Foundation
+
+// MARK: - Occasion Enum
+
+enum Occasion {
+    case birthday
+    case anniversary
+    case graduation
+    case congrats
+    case getWell
+    case justBecause
+    case wedding
+    case newBaby
+}
+
+// MARK: - Relationship Enum
+
+enum Relationship {
+    case friend
+    case family
+    case colleague
+    case partner
+    case mentor
+    case acquaintance
+    case other
+}
+
+// MARK: - Theme Enum
+
+enum Theme: Equatable {
+    case movie
+    case musician
+    case tvCharacter
+    case book
+    case show
+    case superhero
+    case custom
+
+    var promptText: String {
+        switch self {
+        case .movie: return "What's the movie?"
+        case .musician: return "Who's the musician?"
+        case .tvCharacter: return "Who's the character?"
+        case .book: return "What's the book?"
+        case .show: return "What's the show?"
+        case .superhero: return "Who's the superhero?"
+        case .custom: return "What's the inspiration?"
+        }
+    }
+
+    var placeholderText: String {
+        switch self {
+        case .movie: return "Enter the name of the movie"
+        case .musician: return "Enter the name of the musician"
+        case .tvCharacter: return "Enter the character name"
+        case .book: return "Enter the name of the book"
+        case .show: return "Enter the name of the show"
+        case .superhero: return "Enter the superhero name"
+        case .custom: return "Enter your custom inspiration"
+        }
+    }
+}
+
+// MARK: - Message Length Enum
+
+enum MessageLength: Equatable {
+    case short
+    case medium
+    case long
+}
+
+// MARK: - Saved Message Model
+
+struct SavedMessage: Identifiable {
+    let id: UUID
+    let recipientName: String
+    let occasion: Occasion
+    let theme: String?  // e.g., "The Godfather", "Taylor Swift", etc.
+    let messageText: String
+    let date: Date
+    var isFavorite: Bool
+}
