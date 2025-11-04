@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct PersonalInformationView: View {
-    @State private var recipientName: String = ""
-    @State private var selectedOccasion: Occasion? = nil
-    @State private var selectedRelationship: Relationship? = nil
+    @Environment(MessageState.self) private var messageState
     @State private var isAnimated: Bool = false
     @Environment(\.colorScheme) private var colorScheme
+
+    private var bindableState: Bindable<MessageState> {
+        Bindable(messageState)
+    }
 
     var body: some View {
         ZStack {
@@ -24,20 +26,20 @@ struct PersonalInformationView: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 40) {
-                        RecipientNameSection(recipientName: $recipientName)
+                        RecipientNameSection(recipientName: bindableState.recipientName)
                             .padding(.top, 24)
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 20)
 
-                        OccasionSelectionSection(selectedOccasion: $selectedOccasion)
+                        OccasionSelectionSection(selectedOccasion: bindableState.selectedOccasion)
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 20)
 
-                        RelationshipSelectionSection(selectedRelationship: $selectedRelationship)
+                        RelationshipSelectionSection(selectedRelationship: bindableState.selectedRelationship)
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 20)
 
-                        ContinueButton()
+                        ContinueButton(isEnabled: messageState.canContinueToTheme)
                             .padding(.top, 16)
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 20)
@@ -148,6 +150,8 @@ struct RelationshipSelectionSection: View {
 // MARK: - Continue Button
 
 struct ContinueButton: View {
+    let isEnabled: Bool
+
     var body: some View {
         NavigationLink(destination: MessageThemeView()) {
             HStack(spacing: 12) {
@@ -165,11 +169,14 @@ struct ContinueButton: View {
                     .fill(AppColors.primaryButtonGradient)
                     .shadow(color: Color.orange.opacity(0.3), radius: 16, x: 0, y: 6)
             )
+            .opacity(isEnabled ? 1.0 : 0.5)
         }
         .buttonPressAnimation()
+        .disabled(!isEnabled)
     }
 }
 
 #Preview {
     PersonalInformationView()
+        .environment(MessageState())
 }

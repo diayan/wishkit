@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var messageState = MessageState()
+
     var body: some View {
         TabView {
             NavigationStack {
@@ -27,6 +29,7 @@ struct ContentView: View {
             }
         }
         .tint(.red)
+        .environment(messageState)
     }
 }
 

@@ -9,10 +9,12 @@ import SwiftUI
 
 struct GenerateMessageButton: View {
     @Binding var isAnimating: Bool
+    let isEnabled: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: {
+            guard isEnabled else { return }
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                 isAnimating = true
             }
@@ -87,6 +89,8 @@ struct GenerateMessageButton: View {
                 )
                 .scaleEffect(isAnimating ? 0.95 : 1.0)
             }
+            .opacity(isEnabled ? 1.0 : 0.5)
         }
+        .disabled(!isEnabled)
     }
 }

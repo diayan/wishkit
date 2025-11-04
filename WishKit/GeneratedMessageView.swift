@@ -10,13 +10,8 @@ import SwiftUI
 struct GeneratedMessageView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(MessageState.self) private var messageState
     @State private var isAnimated: Bool = false
-
-    // Message details
-    let recipientName: String
-    let occasion: String
-    let theme: String?
-    let messageText: String
 
     var body: some View {
         ZStack {
@@ -43,14 +38,14 @@ struct GeneratedMessageView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 32) {
                         SuccessHeaderSection(
-                            recipientName: recipientName,
-                            occasion: occasion,
-                            theme: theme
+                            recipientName: messageState.recipientName,
+                            occasion: messageState.selectedOccasion?.displayName ?? "",
+                            theme: messageState.themeName.isEmpty ? nil : messageState.themeName
                         )
                         .opacity(isAnimated ? 1 : 0)
                         .offset(y: isAnimated ? 0 : 30)
 
-                        MessageDisplayCard(messageText: messageText)
+                        MessageDisplayCard(messageText: messageState.generatedMessage)
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 30)
 
@@ -80,10 +75,12 @@ struct GeneratedMessageView: View {
 }
 
 #Preview {
-    GeneratedMessageView(
-        recipientName: "Sarah",
-        occasion: "Birthday",
-        theme: "Harry Potter",
-        messageText: "✨ Happy Birthday, Sarah! May your day sparkle with a little mischief, a touch of magic, and the wonder of a well-cast charm. Here's to another year of adventures, friendships as loyal as a Patronus, and dreams as limitless as the wizarding world itself. Wishing you all the joy and happiness today! 🪄"
-    )
+    let state = MessageState()
+    state.recipientName = "Sarah"
+    state.selectedOccasion = .birthday
+    state.themeName = "Harry Potter"
+    state.generatedMessage = "✨ Happy Birthday, Sarah! May your day sparkle with a little mischief, a touch of magic, and the wonder of a well-cast charm. Here's to another year of adventures, friendships as loyal as a Patronus, and dreams as limitless as the wizarding world itself. Wishing you all the joy and happiness today! 🪄"
+
+    return GeneratedMessageView()
+        .environment(state)
 }

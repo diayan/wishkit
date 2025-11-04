@@ -18,6 +18,19 @@ enum Occasion {
     case justBecause
     case wedding
     case newBaby
+
+    var displayName: String {
+        switch self {
+        case .birthday: return "Birthday"
+        case .anniversary: return "Anniversary"
+        case .graduation: return "Graduation"
+        case .congrats: return "Congrats"
+        case .getWell: return "Get Well"
+        case .justBecause: return "Just Because"
+        case .wedding: return "Wedding"
+        case .newBaby: return "New Baby"
+        }
+    }
 }
 
 // MARK: - Relationship Enum
