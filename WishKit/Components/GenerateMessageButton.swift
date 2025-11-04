@@ -42,19 +42,19 @@ struct GenerateMessageButton: View {
 
                 HStack(spacing: 12) {
                     Image(systemName: "sparkles")
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.system(size: 18, weight: .semibold))
                         .rotationEffect(.degrees(isAnimating ? 360 : 0))
 
                     Text("Generate My Message")
-                        .font(.system(size: 19, weight: .bold))
+                        .font(.system(size: 18, weight: .semibold))
 
                     Image(systemName: "sparkles")
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.system(size: 18, weight: .semibold))
                         .rotationEffect(.degrees(isAnimating ? -360 : 0))
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 20)
+                .padding(.vertical, 18)
                 .background(
                     Capsule()
                         .fill(

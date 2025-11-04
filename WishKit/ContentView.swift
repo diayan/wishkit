@@ -12,6 +12,7 @@ struct ContentView: View {
         TabView {
             NavigationStack {
                 PersonalInformationView()
+                    .navigationBarTitleDisplayMode(.inline)
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
@@ -19,6 +20,7 @@ struct ContentView: View {
 
             NavigationStack {
                 MessageHistoryView()
+                    .navigationBarTitleDisplayMode(.inline)
             }
             .tabItem {
                 Label("History", systemImage: "clock.fill")

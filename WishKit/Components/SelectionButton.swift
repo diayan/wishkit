@@ -20,7 +20,7 @@ struct SelectionButton: View {
             VStack(spacing: 10) {
                 ZStack {
                     Circle()
-                        .fill(isSelected ? color.opacity(0.2) : .white)
+                        .fill(isSelected ? color.opacity(0.2) : Color.white.opacity(colorScheme == .dark ? 0.9 : 1.0))
                         .frame(width: 72, height: 72)
                         .shadow(
                             color: Color.black.opacity(colorScheme == .dark ? 0.4 : 0.2),
@@ -65,7 +65,8 @@ struct SelectionButton: View {
                     .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity)
+            .selectionAnimation(isSelected: isSelected)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonPressAnimation()
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MessageHistoryView: View {
     @Environment(\.colorScheme) private var colorScheme
+    @State private var isAnimated: Bool = false
 
     // Sample data
     @State private var messages: [SavedMessage] = [
@@ -54,6 +55,8 @@ struct MessageHistoryView: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity)
+                    .opacity(isAnimated ? 1 : 0)
+                    .offset(y: isAnimated ? 0 : -20)
 
                 // Message Cards
                 ScrollView(.vertical, showsIndicators: false) {
@@ -66,13 +69,20 @@ struct MessageHistoryView: View {
                                 )
                                 .offset(x: index % 2 == 0 ? -8 : 8)
                                 .zIndex(Double(messages.count - index))
+                                .opacity(isAnimated ? 1 : 0)
+                                .offset(y: isAnimated ? 0 : 50)
                         }
 
-                        Spacer(minLength: 200)
+                        Spacer(minLength: 40)
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 20)
                 }
+            }
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
+                isAnimated = true
             }
         }
     }

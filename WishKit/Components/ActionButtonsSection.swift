@@ -10,6 +10,7 @@ import SwiftUI
 struct ActionButtonsSection: View {
     let onCopy: () -> Void
     let onShare: () -> Void
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(spacing: 16) {
@@ -31,6 +32,7 @@ struct ActionButtonsSection: View {
                         .shadow(color: Color.orange.opacity(0.3), radius: 16, x: 0, y: 6)
                 )
             }
+            .buttonStyle(ScaleButtonStyle(scaleAmount: 0.92))
 
             // Share Button
             Button(action: onShare) {
@@ -44,12 +46,17 @@ struct ActionButtonsSection: View {
                 .foregroundColor(.primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
+                .background(
+                    Capsule()
+                        .fill(AppColors.cardGradient(for: colorScheme))
+                        .overlay(
+                            Capsule()
+                                .stroke(AppColors.cardBorderColor(for: colorScheme), lineWidth: 1.5)
+                        )
+                        .shadow(color: AppColors.cardShadow(for: colorScheme).opacity(colorScheme == .dark ? 0.3 : 0.12), radius: 12, x: 0, y: 4)
+                )
             }
-            .buttonStyle(PlainButtonStyle())
-            .background(
-                Capsule()
-                    .cardStyle()
-            )
+            .buttonStyle(ScaleButtonStyle(scaleAmount: 0.92))
         }
     }
 }

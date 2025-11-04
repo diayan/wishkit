@@ -50,7 +50,8 @@ struct LengthButton: View {
                             y: isSelected ? 6 : 4
                         )
                 )
+                .selectionAnimation(isSelected: isSelected)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonPressAnimation()
     }
 }

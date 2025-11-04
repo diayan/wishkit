@@ -10,6 +10,7 @@ import SwiftUI
 struct GeneratedMessageView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+    @State private var isAnimated: Bool = false
 
     // Message details
     let recipientName: String
@@ -37,6 +38,7 @@ struct GeneratedMessageView: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
+                .opacity(isAnimated ? 1 : 0)
 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 32) {
@@ -45,8 +47,12 @@ struct GeneratedMessageView: View {
                             occasion: occasion,
                             theme: theme
                         )
+                        .opacity(isAnimated ? 1 : 0)
+                        .offset(y: isAnimated ? 0 : 30)
 
                         MessageDisplayCard(messageText: messageText)
+                            .opacity(isAnimated ? 1 : 0)
+                            .offset(y: isAnimated ? 0 : 30)
 
                         ActionButtonsSection(
                             onCopy: {
@@ -56,11 +62,18 @@ struct GeneratedMessageView: View {
                                 // Share action
                             }
                         )
+                        .opacity(isAnimated ? 1 : 0)
+                        .offset(y: isAnimated ? 0 : 30)
 
                         Spacer(minLength: 40)
                     }
                     .padding(.horizontal, 24)
                 }
+            }
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.75).delay(0.1)) {
+                isAnimated = true
             }
         }
     }

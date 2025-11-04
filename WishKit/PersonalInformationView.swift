@@ -11,6 +11,7 @@ struct PersonalInformationView: View {
     @State private var recipientName: String = ""
     @State private var selectedOccasion: Occasion? = nil
     @State private var selectedRelationship: Relationship? = nil
+    @State private var isAnimated: Bool = false
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -25,18 +26,31 @@ struct PersonalInformationView: View {
                     VStack(alignment: .leading, spacing: 40) {
                         RecipientNameSection(recipientName: $recipientName)
                             .padding(.top, 24)
+                            .opacity(isAnimated ? 1 : 0)
+                            .offset(y: isAnimated ? 0 : 20)
 
                         OccasionSelectionSection(selectedOccasion: $selectedOccasion)
+                            .opacity(isAnimated ? 1 : 0)
+                            .offset(y: isAnimated ? 0 : 20)
 
                         RelationshipSelectionSection(selectedRelationship: $selectedRelationship)
+                            .opacity(isAnimated ? 1 : 0)
+                            .offset(y: isAnimated ? 0 : 20)
 
                         ContinueButton()
                             .padding(.top, 16)
+                            .opacity(isAnimated ? 1 : 0)
+                            .offset(y: isAnimated ? 0 : 20)
 
-                        Spacer(minLength: 100)
+                        Spacer(minLength: 40)
                     }
                     .padding(.horizontal, 24)
                 }
+            }
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
+                isAnimated = true
             }
         }
     }
@@ -136,13 +150,12 @@ struct RelationshipSelectionSection: View {
 struct ContinueButton: View {
     var body: some View {
         NavigationLink(destination: MessageThemeView()) {
-            HStack(spacing: 8) {
+            HStack(spacing: 12) {
                 Text("Continue")
-                    .font(.headline)
-                    .fontWeight(.semibold)
+                    .font(.system(size: 18, weight: .semibold))
 
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
@@ -153,6 +166,7 @@ struct ContinueButton: View {
                     .shadow(color: Color.orange.opacity(0.3), radius: 16, x: 0, y: 6)
             )
         }
+        .buttonPressAnimation()
     }
 }
 
