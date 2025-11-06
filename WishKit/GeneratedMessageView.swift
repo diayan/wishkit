@@ -88,14 +88,7 @@ struct GeneratedMessageView: View {
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 30)
 
-                        ActionButtonsSection(
-                            onCopy: {
-                                // Copy action
-                            },
-                            onShare: {
-                                // Share action
-                            }
-                        )
+                        ActionButtonsSection(messageText: displayMessage)
                         .opacity(isAnimated ? 1 : 0)
                         .offset(y: isAnimated ? 0 : 30)
 
