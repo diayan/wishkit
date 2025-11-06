@@ -8,15 +8,49 @@
 import SwiftUI
 
 struct GeneratedMessageView: View {
+    // Optional parameters for direct message display
+    let recipientName: String?
+    let occasion: String?
+    let theme: String?
+    let messageText: String?
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(MessageState.self) private var messageState
     @State private var isAnimated: Bool = false
 
-    // Message details
-    let recipientName: String
-    let occasion: String
-    let theme: String?
-    let messageText: String
+    // Default initializer for use with MessageState environment
+    init() {
+        self.recipientName = nil
+        self.occasion = nil
+        self.theme = nil
+        self.messageText = nil
+    }
+
+    // Initializer for direct message display (e.g., from history)
+    init(recipientName: String, occasion: String, theme: String?, messageText: String) {
+        self.recipientName = recipientName
+        self.occasion = occasion
+        self.theme = theme
+        self.messageText = messageText
+    }
+
+    // Computed properties to get the correct data source
+    private var displayRecipientName: String {
+        recipientName ?? messageState.recipientName
+    }
+
+    private var displayOccasion: String {
+        occasion ?? (messageState.selectedOccasion?.displayName ?? "")
+    }
+
+    private var displayTheme: String? {
+        theme ?? (messageState.themeName.isEmpty ? nil : messageState.themeName)
+    }
+
+    private var displayMessage: String {
+        messageText ?? messageState.generatedMessage
+    }
 
     var body: some View {
         ZStack {
@@ -43,14 +77,14 @@ struct GeneratedMessageView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 32) {
                         SuccessHeaderSection(
-                            recipientName: recipientName,
-                            occasion: occasion,
-                            theme: theme
+                            recipientName: displayRecipientName,
+                            occasion: displayOccasion,
+                            theme: displayTheme
                         )
                         .opacity(isAnimated ? 1 : 0)
                         .offset(y: isAnimated ? 0 : 30)
 
-                        MessageDisplayCard(messageText: messageText)
+                        MessageDisplayCard(messageText: displayMessage)
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 30)
 
@@ -80,10 +114,12 @@ struct GeneratedMessageView: View {
 }
 
 #Preview {
-    GeneratedMessageView(
-        recipientName: "Sarah",
-        occasion: "Birthday",
-        theme: "Harry Potter",
-        messageText: "✨ Happy Birthday, Sarah! May your day sparkle with a little mischief, a touch of magic, and the wonder of a well-cast charm. Here's to another year of adventures, friendships as loyal as a Patronus, and dreams as limitless as the wizarding world itself. Wishing you all the joy and happiness today! 🪄"
-    )
+    let state = MessageState()
+    state.recipientName = "Sarah"
+    state.selectedOccasion = .birthday
+    state.themeName = "Harry Potter"
+    state.generatedMessage = "✨ Happy Birthday, Sarah! May your day sparkle with a little mischief, a touch of magic, and the wonder of a well-cast charm. Here's to another year of adventures, friendships as loyal as a Patronus, and dreams as limitless as the wizarding world itself. Wishing you all the joy and happiness today! 🪄"
+
+    return GeneratedMessageView()
+        .environment(state)
 }

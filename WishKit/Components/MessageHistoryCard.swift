@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MessageHistoryCard: View {
     let message: SavedMessage
-    @State private var isFavorite: Bool = false
     @Environment(\.colorScheme) private var colorScheme
+    @State private var showMessageDetail: Bool = false
 
     var occasionIcon: String {
         switch message.occasion {
@@ -25,19 +25,6 @@ struct MessageHistoryCard: View {
         }
     }
 
-    var occasionText: String {
-        switch message.occasion {
-        case .birthday: return "Birthday"
-        case .anniversary: return "Anniversary"
-        case .graduation: return "Graduation"
-        case .wedding: return "Wedding"
-        case .congrats: return "Congrats"
-        case .getWell: return "Get Well"
-        case .newBaby: return "New Baby"
-        case .justBecause: return "Just Because"
-        }
-    }
-
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
@@ -46,7 +33,7 @@ struct MessageHistoryCard: View {
 
     var body: some View {
         Button(action: {
-            // Action to view full message
+            showMessageDetail = true
         }) {
             VStack(alignment: .leading, spacing: 16) {
                 // Header with occasion, theme, and favorite
@@ -56,7 +43,7 @@ struct MessageHistoryCard: View {
                             .font(.system(size: 16))
                             .foregroundColor(.secondary)
 
-                        Text(occasionText)
+                        Text(message.occasion.displayName)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
 
@@ -114,5 +101,16 @@ struct MessageHistoryCard: View {
             .cardStyle()
         }
         .cardTapAnimation()
+        .sheet(isPresented: $showMessageDetail) {
+            GeneratedMessageView(
+                recipientName: message.recipientName,
+                occasion: message.occasion.displayName,
+                theme: message.theme,
+                messageText: message.messageText
+            )
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(28)
+        }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct WishKitApp: App {
@@ -13,5 +14,6 @@ struct WishKitApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: SavedMessage.self)
     }
 }
