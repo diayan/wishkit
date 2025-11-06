@@ -10,6 +10,7 @@ import SwiftUI
 struct GenerateMessageButton: View {
     @Binding var isAnimating: Bool
     let isEnabled: Bool
+    let isGenerating: Bool
     let action: () -> Void
 
     var body: some View {
@@ -43,16 +44,24 @@ struct GenerateMessageButton: View {
                     .blur(radius: 8)
 
                 HStack(spacing: 12) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 18, weight: .semibold))
-                        .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    if isGenerating {
+                        ProgressView()
+                            .tint(.white)
 
-                    Text("Generate My Message")
-                        .font(.system(size: 18, weight: .semibold))
+                        Text("Generating...")
+                            .font(.system(size: 18, weight: .semibold))
+                    } else {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 18, weight: .semibold))
+                            .rotationEffect(.degrees(isAnimating ? 360 : 0))
 
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 18, weight: .semibold))
-                        .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                        Text("Generate My Message")
+                            .font(.system(size: 18, weight: .semibold))
+
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 18, weight: .semibold))
+                            .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                    }
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)

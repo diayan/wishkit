@@ -12,6 +12,7 @@ struct MessageThemeView: View {
     @State private var isButtonAnimating: Bool = false
     @State private var showGeneratedMessage: Bool = false
     @State private var isAnimated: Bool = false
+    @State private var showErrorAlert: Bool = false
     @Environment(\.colorScheme) private var colorScheme
 
     private var bindableState: Bindable<MessageState> {
@@ -49,9 +50,17 @@ struct MessageThemeView: View {
 
                         GenerateMessageButton(
                             isAnimating: $isButtonAnimating,
-                            isEnabled: messageState.canGenerateMessage
+                            isEnabled: messageState.canGenerateMessage,
+                            isGenerating: messageState.isGenerating
                         ) {
-                            showGeneratedMessage = true
+                            Task {
+                                await messageState.generateMessage()
+                                if let error = messageState.generationError {
+                                    showErrorAlert = true
+                                } else if !messageState.generatedMessage.isEmpty {
+                                    showGeneratedMessage = true
+                                }
+                            }
                         }
                         .padding(.top, 16)
                         .opacity(isAnimated ? 1 : 0)
@@ -75,6 +84,23 @@ struct MessageThemeView: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(28)
+        }
+        .alert("Generation Failed", isPresented: $showErrorAlert) {
+            Button("Try Again") {
+                Task {
+                    await messageState.generateMessage()
+                    if messageState.generationError == nil && !messageState.generatedMessage.isEmpty {
+                        showGeneratedMessage = true
+                    } else if messageState.generationError != nil {
+                        showErrorAlert = true
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                messageState.clearError()
+            }
+        } message: {
+            Text(messageState.generationError ?? "An unknown error occurred")
         }
     }
 }
