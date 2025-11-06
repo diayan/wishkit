@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import SwiftData
 
 // MARK: - Occasion Enum
 
-enum Occasion {
+enum Occasion: String, Codable {
     case birthday
     case anniversary
     case graduation
@@ -35,7 +36,7 @@ enum Occasion {
 
 // MARK: - Relationship Enum
 
-enum Relationship {
+enum Relationship: String, Codable {
     case friend
     case family
     case colleague
@@ -91,12 +92,31 @@ enum MessageLength: Equatable {
 
 // MARK: - Saved Message Model
 
-struct SavedMessage: Identifiable {
-    let id: UUID
-    let recipientName: String
-    let occasion: Occasion
-    let theme: String?  // e.g., "The Godfather", "Taylor Swift", etc.
-    let messageText: String
-    let date: Date
+@Model
+class SavedMessage {
+    @Attribute(.unique) var id: UUID
+    var recipientName: String
+    var occasion: Occasion
+    var theme: String?  // e.g., "The Godfather", "Taylor Swift", etc.
+    var messageText: String
+    var date: Date
     var isFavorite: Bool
+
+    init(
+        id: UUID = UUID(),
+        recipientName: String,
+        occasion: Occasion,
+        theme: String? = nil,
+        messageText: String,
+        date: Date = Date(),
+        isFavorite: Bool = false
+    ) {
+        self.id = id
+        self.recipientName = recipientName
+        self.occasion = occasion
+        self.theme = theme
+        self.messageText = messageText
+        self.date = date
+        self.isFavorite = isFavorite
+    }
 }

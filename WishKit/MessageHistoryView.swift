@@ -6,42 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MessageHistoryView: View {
+    @Binding var selectedTab: Int
     @Environment(\.colorScheme) private var colorScheme
     @State private var isAnimated: Bool = false
 
-    // Sample data
-    @State private var messages: [SavedMessage] = [
-        SavedMessage(
-            id: UUID(),
-            recipientName: "Mize",
-            occasion: .birthday,
-            theme: "Star Trek",
-            messageText: "Happy emergence day, Mize! A being celebrates your solar rotation with deep gratitude for your existence",
-            date: Date(),
-            isFavorite: false
-        ),
-        SavedMessage(
-            id: UUID(),
-            recipientName: "Yung",
-            occasion: .birthday,
-            theme: "Harry Potter",
-            messageText: "✨ Happy Birthday, Yung! May your day sparkle with a little mischief, a touch of magic, and the wonder of a well-cast charm. 🪄",
-            date: Date(),
-            isFavorite: false
-        ),
-        SavedMessage(
-            id: UUID(),
-            recipientName: "Ray",
-            occasion: .birthday,
-            theme: "Friends",
-            messageText: "🍕 Happy Birthday, Ray! Hope your day's full of good food, great laughs, and people who know — you're the gift that keeps on giving. How you doin'? 😉",
-            date: Date(),
-            isFavorite: false
-        )
-
-    ]
+    @Query(sort: \SavedMessage.date, order: .reverse) private var messages: [SavedMessage]
 
     var body: some View {
         ZStack {
@@ -58,25 +30,71 @@ struct MessageHistoryView: View {
                     .opacity(isAnimated ? 1 : 0)
                     .offset(y: isAnimated ? 0 : -20)
 
-                // Message Cards
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack() {
-                        ForEach(Array(messages.enumerated()), id: \.element.id) { index, message in
-                            MessageHistoryCard(message: message)
-                                .rotation3DEffect(
-                                    .degrees(index % 2 == 0 ? 3 : -3),
-                                    axis: (x: 0, y: 0, z: 1)
-                                )
-                                .offset(x: index % 2 == 0 ? -8 : 8)
-                                .zIndex(Double(messages.count - index))
-                                .opacity(isAnimated ? 1 : 0)
-                                .offset(y: isAnimated ? 0 : 50)
-                        }
+                // Message Cards or Empty State
+                if messages.isEmpty {
+                    VStack(spacing: 24) {
+                        Spacer()
 
-                        Spacer(minLength: 40)
+                        Image(systemName: "tray.fill")
+                            .font(.system(size: 64))
+                            .foregroundColor(.secondary.opacity(0.5))
+
+                        Text("No Messages Yet")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+
+                        Text("Generate your first message to see it here!")
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 48)
+
+                        Button(action: {
+                            selectedTab = 0
+                        }) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 18, weight: .semibold))
+
+                                Text("Create Your Message")
+                                    .font(.system(size: 18, weight: .semibold))
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 32)
+                            .padding(.vertical, 18)
+                            .background(
+                                Capsule()
+                                    .fill(AppColors.primaryButtonGradient)
+                                    .shadow(color: Color.orange.opacity(0.3), radius: 16, x: 0, y: 6)
+                            )
+                        }
+                        .buttonPressAnimation()
+                        .padding(.top, 16)
+
+                        Spacer()
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20)
+                    .opacity(isAnimated ? 1 : 0)
+                } else {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack() {
+                            ForEach(Array(messages.enumerated()), id: \.element.id) { index, message in
+                                MessageHistoryCard(message: message)
+                                    .rotation3DEffect(
+                                        .degrees(index % 2 == 0 ? 3 : -3),
+                                        axis: (x: 0, y: 0, z: 1)
+                                    )
+                                    .offset(x: index % 2 == 0 ? -8 : 8)
+                                    .zIndex(Double(messages.count - index))
+                                    .opacity(isAnimated ? 1 : 0)
+                                    .offset(y: isAnimated ? 0 : 50)
+                            }
+
+                            Spacer(minLength: 40)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                    }
                 }
             }
         }
@@ -89,5 +107,6 @@ struct MessageHistoryView: View {
 }
 
 #Preview {
-    MessageHistoryView()
+    MessageHistoryView(selectedTab: .constant(1))
+        .modelContainer(for: SavedMessage.self, inMemory: true)
 }

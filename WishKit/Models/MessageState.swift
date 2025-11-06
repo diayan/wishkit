@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import SwiftData
 
 @Observable
 class MessageState {
     // MARK: - Services
     private let openAIService: OpenAIService
+    private var modelContext: ModelContext?
 
     // MARK: - Personal Information
     var recipientName: String = ""
@@ -52,6 +54,10 @@ class MessageState {
 
     // MARK: - Actions
 
+    func setModelContext(_ context: ModelContext) {
+        self.modelContext = context
+    }
+
     func generateMessage() async {
         guard canGenerateMessage,
               let occasion = selectedOccasion,
@@ -75,9 +81,33 @@ class MessageState {
 
             generatedMessage = message
             isGenerating = false
+
+            // Automatically save the generated message
+            saveMessage(message, occasion: occasion)
         } catch {
             isGenerating = false
             generationError = error.localizedDescription
+        }
+    }
+
+    private func saveMessage(_ message: String, occasion: Occasion) {
+        guard let context = modelContext else { return }
+
+        let savedMessage = SavedMessage(
+            recipientName: recipientName,
+            occasion: occasion,
+            theme: themeName.isEmpty ? nil : themeName,
+            messageText: message,
+            date: Date(),
+            isFavorite: false
+        )
+
+        context.insert(savedMessage)
+
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save message: \(error.localizedDescription)")
         }
     }
 
