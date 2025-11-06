@@ -8,19 +8,27 @@
 import SwiftUI
 
 struct ActionButtonsSection: View {
-    let onCopy: () -> Void
-    let onShare: () -> Void
+    let messageText: String
     @Environment(\.colorScheme) private var colorScheme
+    @State private var showCopiedFeedback: Bool = false
+    @State private var showShareSheet: Bool = false
 
     var body: some View {
         VStack(spacing: 16) {
             // Copy Button
-            Button(action: onCopy) {
+            Button(action: {
+                UIPasteboard.general.string = messageText
+                showCopiedFeedback = true
+                // Hide feedback after 2 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    showCopiedFeedback = false
+                }
+            }) {
                 HStack(spacing: 12) {
-                    Image(systemName: "doc.on.doc.fill")
+                    Image(systemName: showCopiedFeedback ? "checkmark" : "doc.on.doc.fill")
                         .font(.system(size: 18, weight: .semibold))
 
-                    Text("Copy Message")
+                    Text(showCopiedFeedback ? "Copied!" : "Copy Message")
                         .font(.system(size: 18, weight: .semibold))
                 }
                 .foregroundColor(.white)
@@ -35,7 +43,9 @@ struct ActionButtonsSection: View {
             .buttonStyle(ScaleButtonStyle(scaleAmount: 0.92))
 
             // Share Button
-            Button(action: onShare) {
+            Button(action: {
+                showShareSheet = true
+            }) {
                 HStack(spacing: 12) {
                     Image(systemName: "square.and.arrow.up.fill")
                         .font(.system(size: 18, weight: .semibold))
@@ -57,6 +67,9 @@ struct ActionButtonsSection: View {
                 )
             }
             .buttonStyle(ScaleButtonStyle(scaleAmount: 0.92))
+        }
+        .sheet(isPresented: $showShareSheet) {
+            ActivityViewController(activityItems: [messageText])
         }
     }
 }
