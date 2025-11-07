@@ -18,7 +18,7 @@ struct SelectionGrid<Item: Equatable, Content: View>: View {
             SectionTitle(title)
 
             VStack(spacing: 20) {
-                ForEach(0..<2, id: \.self) { rowIndex in
+                ForEach(0..<3, id: \.self) { rowIndex in
                     HStack(spacing: 8) {
                         ForEach(items.indices.filter { $0 / 4 == rowIndex }, id: \.self) { index in
                             buttonBuilder(
@@ -29,7 +29,7 @@ struct SelectionGrid<Item: Equatable, Content: View>: View {
                             )
                         }
 
-                        if rowIndex == 1 && items.count % 4 != 0 {
+                        if items.indices.filter({ $0 / 4 == rowIndex }).count < 4 {
                             Spacer().frame(maxWidth: .infinity)
                         }
                     }

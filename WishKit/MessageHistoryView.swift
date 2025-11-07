@@ -36,7 +36,7 @@ struct MessageHistoryView: View {
                         Spacer()
 
                         Image(systemName: "tray.fill")
-                            .font(.system(size: 64))
+                            .font(.system(size: 60))
                             .foregroundColor(.secondary.opacity(0.5))
 
                         Text("No Messages Yet")
@@ -55,10 +55,10 @@ struct MessageHistoryView: View {
                         }) {
                             HStack(spacing: 12) {
                                 Image(systemName: "sparkles")
-                                    .font(.system(size: 18, weight: .semibold))
+                                    .font(.headline)
 
                                 Text("Create Your Message")
-                                    .font(.system(size: 18, weight: .semibold))
+                                    .font(.headline)
                             }
                             .foregroundColor(.white)
                             .padding(.horizontal, 32)

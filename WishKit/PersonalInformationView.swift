@@ -95,6 +95,8 @@ struct OccasionSelectionSection: View {
         (.congrats, "sparkles", "Congrats", .yellow),
         (.getWell, "leaf.fill", "Get Well", .purple),
         (.newBaby, "figure.2.and.child.holdinghands", "New Baby", .green),
+        (.christmas, "tree.fill", "Christmas", .green),
+        (.newYear, "party.popper.fill", "New Year", .orange),
         (.justBecause, "face.smiling.fill", "Other", .black)
     ]
 
@@ -156,10 +158,10 @@ struct ContinueButton: View {
         NavigationLink(destination: MessageThemeView()) {
             HStack(spacing: 12) {
                 Text("Continue")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.headline)
 
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.headline)
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)

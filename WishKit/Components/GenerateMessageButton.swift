@@ -49,17 +49,17 @@ struct GenerateMessageButton: View {
                             .tint(.white)
 
                         Text("Generating...")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
                     } else {
                         Image(systemName: "sparkles")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
                             .rotationEffect(.degrees(isAnimating ? 360 : 0))
 
                         Text("Generate My Message")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
 
                         Image(systemName: "sparkles")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
                             .rotationEffect(.degrees(isAnimating ? -360 : 0))
                     }
                 }

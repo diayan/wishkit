@@ -19,6 +19,7 @@ struct ThemeSelectionSection: View {
         (.book, "book.fill", "Book", .brown),
         (.show, "film.fill", "Show", .purple),
         (.superhero, "bolt.fill", "Superhero", .green),
+        (.comic, "bolt.fill", "Comic", .pink),
         (.custom, "sparkles", "Custom", .teal)
     ]
 

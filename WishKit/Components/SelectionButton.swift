@@ -36,7 +36,7 @@ struct SelectionButton: View {
                         )
 
                     Image(systemName: icon)
-                        .font(.system(size: 20))
+                        .font(.title3)
                         .foregroundColor(color)
                 }
                 .background(

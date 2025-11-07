@@ -16,7 +16,8 @@ struct LengthButton: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 17, weight: .semibold))
+                .font(.body)
+                .fontWeight(.semibold)
                 .foregroundColor(isSelected ? .white : .primary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)

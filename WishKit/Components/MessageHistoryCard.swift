@@ -21,6 +21,8 @@ struct MessageHistoryCard: View {
         case .congrats: return "sparkles"
         case .getWell: return "leaf.fill"
         case .newBaby: return "figure.2.and.child.holdinghands"
+        case .christmas: return "tree.fill"
+        case .newYear: return "party.popper.fill"
         case .justBecause: return "face.smiling.fill"
         }
     }
@@ -40,7 +42,7 @@ struct MessageHistoryCard: View {
                 HStack {
                     HStack(spacing: 8) {
                         Image(systemName: occasionIcon)
-                            .font(.system(size: 16))
+                            .font(.callout)
                             .foregroundColor(.secondary)
 
                         Text(message.occasion.displayName)
@@ -64,7 +66,8 @@ struct MessageHistoryCard: View {
 
                 // Recipient Name
                 Text(message.recipientName)
-                    .font(.system(size: 34, weight: .bold))
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
                     .foregroundColor(.primary)
 
                 // Divider
@@ -92,7 +95,8 @@ struct MessageHistoryCard: View {
                         .frame(width: 44, height: 44)
                         .overlay(
                             Image(systemName: "arrow.right")
-                                .font(.system(size: 16, weight: .semibold))
+                                .font(.callout)
+                                .fontWeight(.semibold)
                                 .foregroundColor(.white)
                         )
                 }
