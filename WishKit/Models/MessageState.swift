@@ -84,6 +84,13 @@ class MessageState {
             generatedMessage = message
             isGenerating = false
 
+            // Track message generation
+            let count = UserDefaults.standard.integer(forKey: "totalMessagesGenerated")
+            UserDefaults.standard.set(count + 1, forKey: "totalMessagesGenerated")
+
+            // Notify engagement manager
+            NotificationManager.shared.userGeneratedMessage()
+
             // Automatically save the generated message
             saveMessage(message, occasion: occasion)
         } catch {

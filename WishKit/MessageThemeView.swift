@@ -16,6 +16,7 @@ struct MessageThemeView: View {
     @State private var showGeneratedMessage: Bool = false
     @State private var isAnimated: Bool = false
     @State private var showErrorAlert: Bool = false
+    @State private var showSettings = false
     @Environment(\.colorScheme) private var colorScheme
 
     private var bindableState: Bindable<MessageState> {
@@ -80,6 +81,21 @@ struct MessageThemeView: View {
             }
         }
         .navigationBarBackButtonHidden(false)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    HapticManager.light()
+                    showSettings = true
+                }) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .fullScreenCover(isPresented: $showSettings) {
+            SettingsView()
+        }
         .onAppear {
             withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
                 isAnimated = true
