@@ -26,6 +26,14 @@ struct MessageDisplayCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxHeight: 300)
+
+            Divider()
+                .padding(.vertical, 4)
+
+            Text("✨ Original AI-generated content")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 28)

@@ -66,7 +66,7 @@ struct GeneratedMessageView: View {
                         dismiss()
                     }) {
                         Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 30))
+                            .font(.largeTitle)
                             .foregroundColor(.secondary)
                     }
                 }

@@ -19,6 +19,8 @@ enum Occasion: String, Codable {
     case justBecause
     case wedding
     case newBaby
+    case christmas
+    case newYear
 
     var displayName: String {
         switch self {
@@ -30,6 +32,8 @@ enum Occasion: String, Codable {
         case .justBecause: return "Just Because"
         case .wedding: return "Wedding"
         case .newBaby: return "New Baby"
+        case .christmas: return "Christmas"
+        case .newYear: return "New Year"
         }
     }
 }
@@ -55,6 +59,7 @@ enum Theme: Equatable {
     case book
     case show
     case superhero
+    case comic
     case custom
 
     var promptText: String {
@@ -65,6 +70,7 @@ enum Theme: Equatable {
         case .book: return "What's the book?"
         case .show: return "What's the show?"
         case .superhero: return "Who's the superhero?"
+        case .comic: return "what is the comic"
         case .custom: return "What's the inspiration?"
         }
     }
@@ -77,6 +83,7 @@ enum Theme: Equatable {
         case .book: return "Enter the name of the book"
         case .show: return "Enter the name of the show"
         case .superhero: return "Enter the superhero name"
+        case .comic: return "Enter the name of the comic"
         case .custom: return "Enter your custom inspiration"
         }
     }

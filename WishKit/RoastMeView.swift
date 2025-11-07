@@ -34,10 +34,12 @@ struct RoastMeView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "flame.fill")
                             .foregroundColor(Color(red: 1.0, green: 0.45, blue: 0.2))
-                            .font(.system(size: 22, weight: .semibold))
+                            .font(.title3)
+                            .fontWeight(.semibold)
 
                         Text("\(roastCount)")
-                            .font(.system(size: 22, weight: .bold))
+                            .font(.title3)
+                            .fontWeight(.bold)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                     }
                     .padding(.horizontal, 22)
@@ -62,7 +64,8 @@ struct RoastMeView: View {
                     // Settings button
                     Button(action: {}) {
                         Image(systemName: "gearshape.fill")
-                            .font(.system(size: 24, weight: .semibold))
+                            .font(.title2)
+                            .fontWeight(.semibold)
                             .foregroundColor(colorScheme == .dark ? .white : Color(red: 0.2, green: 0.2, blue: 0.2))
                             .frame(width: 54, height: 54)
                             .background(
@@ -92,7 +95,8 @@ struct RoastMeView: View {
                     // Select a Photo section
                     VStack(alignment: .leading, spacing: 18) {
                         Text("Select a Photo")
-                            .font(.system(size: 26, weight: .bold))
+                            .font(.title2)
+                            .fontWeight(.bold)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
 
                         HStack(spacing: 14) {
@@ -144,18 +148,19 @@ struct RoastMeView: View {
                     VStack(alignment: .leading, spacing: 14) {
                         HStack {
                             Text("Set Burn Level")
-                                .font(.system(size: 22, weight: .bold))
+                                .font(.title3)
+                                .fontWeight(.bold)
                                 .foregroundColor(.primary)
 
                             Spacer()
 
                             HStack(spacing: 8) {
                                 Image(systemName: "flame.fill")
-                                    .font(.system(size: 18, weight: .semibold))
+                                    .font(.headline)
                                     .foregroundColor(Color(red: 1.0, green: 0.35, blue: 0.25))
 
                                 Text("Hot")
-                                    .font(.system(size: 18, weight: .bold))
+                                    .font(.headline)
                                     .foregroundColor(.primary)
                             }
                         }
@@ -197,10 +202,12 @@ struct RoastMeView: View {
                     Button(action: {}) {
                         HStack(spacing: 12) {
                             Image(systemName: "flame.fill")
-                                .font(.system(size: 22, weight: .bold))
+                                .font(.title3)
+                                .fontWeight(.bold)
 
                             Text("Roast Me")
-                                .font(.system(size: 22, weight: .bold))
+                                .font(.title3)
+                                .fontWeight(.bold)
                         }
                         .foregroundColor(colorScheme == .dark ? Color(red: 1.0, green: 0.35, blue: 0.2) : .white)
                         .frame(maxWidth: .infinity)
@@ -263,7 +270,8 @@ struct PhotoOptionButton: View {
                     }
 
                     Image(systemName: icon)
-                        .font(.system(size: 36, weight: .semibold))
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(width: 68, height: 68)
                         .background(
@@ -283,7 +291,7 @@ struct PhotoOptionButton: View {
                 }
 
                 Text(title)
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.headline)
                     .foregroundColor(colorScheme == .dark ? .white : .black)
             }
             .frame(maxWidth: .infinity)

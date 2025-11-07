@@ -33,7 +33,7 @@ class MessageState {
 
     // MARK: - Initialization
 
-    init(apiKey: String = "YOUR_API_KEY_HERE") {
+    init(apiKey: String = Config.openAIApiKey) {
         self.openAIService = OpenAIService(apiKey: apiKey)
     }
 
@@ -61,6 +61,7 @@ class MessageState {
     func generateMessage() async {
         guard canGenerateMessage,
               let occasion = selectedOccasion,
+              let themeType = selectedTheme,
               let messageLength = messageLength else {
             return
         }
@@ -73,6 +74,7 @@ class MessageState {
                 recipientName: recipientName,
                 occasion: occasion,
                 relationship: selectedRelationship,
+                themeType: themeType,
                 theme: themeName,
                 messageLength: messageLength,
                 includeEmojis: includeEmojis,

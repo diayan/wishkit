@@ -19,7 +19,8 @@ struct SuccessHeaderSection: View {
                 .foregroundColor(.green)
 
             Text("Your Message is Ready!")
-                .font(.system(size: 28, weight: .bold))
+                .font(.title)
+                .fontWeight(.bold)
                 .foregroundStyle(.primary)
 
             // Message details

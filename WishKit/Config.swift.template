@@ -1,0 +1,15 @@
+//
+//  Config.swift.template
+//  WishKit
+//
+//  INSTRUCTIONS:
+//  1. Copy this file and rename it to "Config.swift"
+//  2. Replace "YOUR_OPENAI_API_KEY_HERE" with your actual OpenAI API key
+//  3. Never commit Config.swift to git (it's in .gitignore)
+//
+
+import Foundation
+
+struct Config {
+    static let openAIApiKey = "YOUR_OPENAI_API_KEY_HERE"
+}

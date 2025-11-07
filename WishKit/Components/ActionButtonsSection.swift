@@ -26,10 +26,10 @@ struct ActionButtonsSection: View {
             }) {
                 HStack(spacing: 12) {
                     Image(systemName: showCopiedFeedback ? "checkmark" : "doc.on.doc.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.headline)
 
                     Text(showCopiedFeedback ? "Copied!" : "Copy Message")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.headline)
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -48,10 +48,10 @@ struct ActionButtonsSection: View {
             }) {
                 HStack(spacing: 12) {
                     Image(systemName: "square.and.arrow.up.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.headline)
 
                     Text("Share Message")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.headline)
                 }
                 .foregroundColor(.primary)
                 .frame(maxWidth: .infinity)

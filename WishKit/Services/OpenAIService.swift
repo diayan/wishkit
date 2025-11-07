@@ -62,6 +62,7 @@ class OpenAIService {
         recipientName: String,
         occasion: Occasion,
         relationship: Relationship?,
+        themeType: Theme,
         theme: String,
         messageLength: MessageLength,
         includeEmojis: Bool,
@@ -72,6 +73,7 @@ class OpenAIService {
             recipientName: recipientName,
             occasion: occasion,
             relationship: relationship,
+            themeType: themeType,
             theme: theme,
             messageLength: messageLength,
             includeEmojis: includeEmojis,
@@ -80,11 +82,11 @@ class OpenAIService {
 
         // Create the request
         let request = OpenAIRequest(
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o-mini",
             messages: [
                 OpenAIRequest.Message(
                     role: "system",
-                    content: "You are a creative and empathetic message writer who crafts personalized, heartfelt messages for various occasions. Your messages are genuine, warm, and tailored to the recipient's interests."
+                    content: "You are a creative message writer who crafts personalized messages inspired by themes users provide. Create original, heartfelt content that captures the spirit and feeling of the theme. Avoid direct quotes or copying copyrighted dialogue verbatim."
                 ),
                 OpenAIRequest.Message(
                     role: "user",
@@ -105,6 +107,7 @@ class OpenAIService {
         recipientName: String,
         occasion: Occasion,
         relationship: Relationship?,
+        themeType: Theme,
         theme: String,
         messageLength: MessageLength,
         includeEmojis: Bool,
@@ -119,7 +122,7 @@ class OpenAIService {
         }
 
         prompt += ".\n\n"
-        prompt += "The message should be inspired by or reference: \(theme)\n"
+        prompt += "The message should be inspired by \(theme) (a \(themeType.categoryDescription)). Capture the essence and feeling of this theme in the message.\n"
 
         if includeEmojis {
             prompt += "Include relevant emojis to make it more expressive.\n"
@@ -135,6 +138,8 @@ class OpenAIService {
         \n
         Requirements:
         - Make it personal and heartfelt
+        - Capture the essence and feeling of \(theme) in the message
+        - Create original content - avoid direct quotes or copying dialogue verbatim
         - Reference the theme naturally and creatively
         - Keep the tone appropriate for a \(occasion.displayName.lowercased()) message
         - Make it feel genuine and sincere
@@ -215,6 +220,21 @@ extension Relationship {
         case .mentor: return "mentor"
         case .acquaintance: return "acquaintance"
         case .other: return "acquaintance"
+        }
+    }
+}
+
+extension Theme {
+    var categoryDescription: String {
+        switch self {
+        case .movie: return "movie"
+        case .musician: return "musician"
+        case .tvCharacter: return "TV character"
+        case .book: return "book"
+        case .show: return "TV show"
+        case .superhero: return "superhero"
+        case .comic: return "comic"
+        case .custom: return "inspiration"
         }
     }
 }
