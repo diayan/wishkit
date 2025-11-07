@@ -20,6 +20,9 @@ struct EmojiToggleSection: View {
                 Toggle("", isOn: $includeEmojis)
                     .labelsHidden()
                     .tint(Color(red: 1.0, green: 0.3, blue: 0.2))
+                    .onChange(of: includeEmojis) { oldValue, newValue in
+                        HapticManager.light()
+                    }
             }
         }
         .padding(.horizontal, 20)

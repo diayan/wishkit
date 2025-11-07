@@ -24,6 +24,7 @@ struct ActionButtonsSection: View {
                 color: .orange,
                 colorScheme: colorScheme
             ) {
+                HapticManager.success()
                 UIPasteboard.general.string = messageText
                 showCopiedFeedback = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -38,6 +39,7 @@ struct ActionButtonsSection: View {
                 color: .blue,
                 colorScheme: colorScheme
             ) {
+                HapticManager.medium()
                 showShareSheet = true
             }
 
@@ -49,6 +51,7 @@ struct ActionButtonsSection: View {
                     color: .purple,
                     colorScheme: colorScheme
                 ) {
+                    HapticManager.medium()
                     onCreateAnother()
                 }
             }

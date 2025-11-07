@@ -60,8 +60,10 @@ struct MessageThemeView: View {
                             Task {
                                 await messageState.generateMessage()
                                 if messageState.generationError != nil {
+                                    HapticManager.error()
                                     showErrorAlert = true
                                 } else if !messageState.generatedMessage.isEmpty {
+                                    HapticManager.success()
                                     showGeneratedMessage = true
                                 }
                             }

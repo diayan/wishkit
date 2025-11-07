@@ -178,6 +178,11 @@ struct ContinueButton: View {
             )
             .opacity(isEnabled ? 1.0 : 0.5)
         }
+        .simultaneousGesture(TapGesture().onEnded {
+            if isEnabled {
+                HapticManager.heavy()
+            }
+        })
         .buttonPressAnimation()
         .disabled(!isEnabled)
     }
