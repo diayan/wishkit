@@ -16,7 +16,10 @@ struct SelectionButton: View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            HapticManager.selection()
+            action()
+        }) {
             VStack(spacing: 10) {
                 ZStack {
                     Circle()

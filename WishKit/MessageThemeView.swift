@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct MessageThemeView: View {
+    @Binding var navigationPath: NavigationPath
+    @Binding var selectedTab: Int
+
     @Environment(MessageState.self) private var messageState
     @State private var isButtonAnimating: Bool = false
     @State private var showGeneratedMessage: Bool = false
@@ -23,6 +26,7 @@ struct MessageThemeView: View {
         ZStack {
             AppColors.backgroundGradient(for: colorScheme)
                 .ignoresSafeArea()
+                .dismissKeyboardOnTap()
 
             VStack(spacing: 0) {
                 HeaderView(title: "What's the vibe?", currentStep: 1)
@@ -55,9 +59,11 @@ struct MessageThemeView: View {
                         ) {
                             Task {
                                 await messageState.generateMessage()
-                                if let error = messageState.generationError {
+                                if messageState.generationError != nil {
+                                    HapticManager.error()
                                     showErrorAlert = true
                                 } else if !messageState.generatedMessage.isEmpty {
+                                    HapticManager.success()
                                     showGeneratedMessage = true
                                 }
                             }
@@ -80,7 +86,18 @@ struct MessageThemeView: View {
             }
         }
         .sheet(isPresented: $showGeneratedMessage) {
-            GeneratedMessageView()
+            GeneratedMessageView(
+                onCreateAnother: {
+                    messageState.reset()
+                    showGeneratedMessage = false
+                    navigationPath.removeLast(navigationPath.count)
+                },
+                onDismiss: {
+                    messageState.reset()
+                    showGeneratedMessage = false
+                    selectedTab = 1  // Switch to History tab
+                }
+            )
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(28)
@@ -106,6 +123,8 @@ struct MessageThemeView: View {
 }
 
 #Preview {
-    MessageThemeView()
+    @Previewable @State var path = NavigationPath()
+    @Previewable @State var tab = 0
+    MessageThemeView(navigationPath: $path, selectedTab: $tab)
         .environment(MessageState())
 }

@@ -13,18 +13,32 @@ struct GeneratedMessageView: View {
     let occasion: String?
     let theme: String?
     let messageText: String?
+    let onCreateAnother: (() -> Void)?
+    let onDismiss: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @Environment(MessageState.self) private var messageState
     @State private var isAnimated: Bool = false
 
-    // Default initializer for use with MessageState environment
+    // Default initializer for use with MessageState environment (deprecated)
     init() {
         self.recipientName = nil
         self.occasion = nil
         self.theme = nil
         self.messageText = nil
+        self.onCreateAnother = nil
+        self.onDismiss = nil
+    }
+
+    // Initializer with create another callback
+    init(onCreateAnother: @escaping () -> Void, onDismiss: @escaping () -> Void) {
+        self.recipientName = nil
+        self.occasion = nil
+        self.theme = nil
+        self.messageText = nil
+        self.onCreateAnother = onCreateAnother
+        self.onDismiss = onDismiss
     }
 
     // Initializer for direct message display (e.g., from history)
@@ -33,6 +47,8 @@ struct GeneratedMessageView: View {
         self.occasion = occasion
         self.theme = theme
         self.messageText = messageText
+        self.onCreateAnother = nil
+        self.onDismiss = nil
     }
 
     // Computed properties to get the correct data source
@@ -63,7 +79,11 @@ struct GeneratedMessageView: View {
                     Spacer()
 
                     Button(action: {
-                        dismiss()
+                        if let onDismiss = onDismiss {
+                            onDismiss()
+                        } else {
+                            dismiss()
+                        }
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.largeTitle)
@@ -88,7 +108,12 @@ struct GeneratedMessageView: View {
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 30)
 
-                        ActionButtonsSection(messageText: displayMessage)
+                        ActionButtonsSection(
+                            messageText: displayMessage,
+                            onCreateAnother: onCreateAnother != nil ? {
+                                onCreateAnother?()
+                            } : nil
+                        )
                         .opacity(isAnimated ? 1 : 0)
                         .offset(y: isAnimated ? 0 : 30)
 

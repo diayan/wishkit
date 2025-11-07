@@ -84,6 +84,10 @@ struct ThemeSelectionSection: View {
                         .padding(.horizontal, 24)
                         .padding(.vertical, 18)
                         .cardStyle()
+                        .submitLabel(.done)
+                        .onSubmit {
+                            UIApplication.shared.hideKeyboard()
+                        }
                 }
                 .transition(.scale(scale: 0.95).combined(with: .opacity))
             }

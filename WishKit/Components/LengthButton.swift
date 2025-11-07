@@ -14,7 +14,10 @@ struct LengthButton: View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            HapticManager.medium()
+            action()
+        }) {
             Text(label)
                 .font(.body)
                 .fontWeight(.semibold)

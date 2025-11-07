@@ -11,13 +11,23 @@ import SwiftData
 struct ContentView: View {
     @State private var messageState = MessageState()
     @State private var selectedTab: Int = 0
+    @State private var navigationPath = NavigationPath()
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            NavigationStack {
+            NavigationStack(path: $navigationPath) {
                 PersonalInformationView()
                     .navigationBarTitleDisplayMode(.inline)
+                    .navigationDestination(for: NavigationDestination.self) { destination in
+                        switch destination {
+                        case .messageTheme:
+                            MessageThemeView(
+                                navigationPath: $navigationPath,
+                                selectedTab: $selectedTab
+                            )
+                        }
+                    }
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
@@ -39,6 +49,12 @@ struct ContentView: View {
             messageState.setModelContext(modelContext)
         }
     }
+}
+
+// MARK: - Navigation Destination
+
+enum NavigationDestination: Hashable {
+    case messageTheme
 }
 
 #Preview {

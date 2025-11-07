@@ -20,6 +20,7 @@ struct PersonalInformationView: View {
         ZStack {
             AppColors.backgroundGradient(for: colorScheme)
                 .ignoresSafeArea()
+                .dismissKeyboardOnTap()
 
             VStack(spacing: 0) {
                 HeaderView(title: "Create Your Message", currentStep: 0)
@@ -78,6 +79,10 @@ struct RecipientNameSection: View {
                 .padding(.horizontal, 24)
                 .padding(.vertical, 18)
                 .cardStyle()
+                .submitLabel(.done)
+                .onSubmit {
+                    UIApplication.shared.hideKeyboard()
+                }
         }
     }
 }
@@ -155,7 +160,7 @@ struct ContinueButton: View {
     let isEnabled: Bool
 
     var body: some View {
-        NavigationLink(destination: MessageThemeView()) {
+        NavigationLink(value: NavigationDestination.messageTheme) {
             HStack(spacing: 12) {
                 Text("Continue")
                     .font(.headline)
@@ -173,6 +178,11 @@ struct ContinueButton: View {
             )
             .opacity(isEnabled ? 1.0 : 0.5)
         }
+        .simultaneousGesture(TapGesture().onEnded {
+            if isEnabled {
+                HapticManager.heavy()
+            }
+        })
         .buttonPressAnimation()
         .disabled(!isEnabled)
     }

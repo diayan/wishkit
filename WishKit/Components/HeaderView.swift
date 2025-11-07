@@ -12,7 +12,7 @@ import SwiftUI
 struct HeaderView: View {
     let title: String
     let currentStep: Int
-    let totalSteps: Int = 3
+    let totalSteps: Int = 2
 
     var body: some View {
         VStack(spacing: 0) {
