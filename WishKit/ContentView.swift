@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var messageState = MessageState()
     @State private var selectedTab: Int = 0
     @State private var navigationPath = NavigationPath()
+    @State private var showNotificationPermission = false
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -47,6 +48,40 @@ struct ContentView: View {
         .environment(messageState)
         .onAppear {
             messageState.setModelContext(modelContext)
+            checkNotificationPermission()
+        }
+        .sheet(isPresented: $showNotificationPermission) {
+            NotificationPermissionView { granted in
+                if granted {
+                    print("✅ User enabled notifications")
+                } else {
+                    print("ℹ️ User declined notifications")
+                }
+            }
+        }
+    }
+
+    /// Check and prompt for notification permission after first message
+    private func checkNotificationPermission() {
+        // Check if user has already been asked
+        let hasAskedForPermission = UserDefaults.standard.bool(forKey: "hasAskedForNotificationPermission")
+
+        guard !hasAskedForPermission else { return }
+
+        // Check if user has generated at least one message
+        let messageCount = UserDefaults.standard.integer(forKey: "totalMessagesGenerated")
+
+        if messageCount >= 1 {
+            // Check current authorization status
+            NotificationManager.shared.checkAuthorizationStatus { status in
+                if status == .notDetermined {
+                    // Show permission prompt after a short delay
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        showNotificationPermission = true
+                        UserDefaults.standard.set(true, forKey: "hasAskedForNotificationPermission")
+                    }
+                }
+            }
         }
     }
 }

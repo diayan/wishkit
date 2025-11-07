@@ -10,6 +10,7 @@ import SwiftUI
 struct PersonalInformationView: View {
     @Environment(MessageState.self) private var messageState
     @State private var isAnimated: Bool = false
+    @State private var showSettings = false
     @Environment(\.colorScheme) private var colorScheme
 
     private var bindableState: Bindable<MessageState> {
@@ -50,6 +51,21 @@ struct PersonalInformationView: View {
                     .padding(.horizontal, 24)
                 }
             }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    HapticManager.light()
+                    showSettings = true
+                }) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .fullScreenCover(isPresented: $showSettings) {
+            SettingsView()
         }
         .onAppear {
             withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
