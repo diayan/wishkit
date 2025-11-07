@@ -155,7 +155,7 @@ struct ContinueButton: View {
     let isEnabled: Bool
 
     var body: some View {
-        NavigationLink(destination: MessageThemeView()) {
+        NavigationLink(value: NavigationDestination.messageTheme) {
             HStack(spacing: 12) {
                 Text("Continue")
                     .font(.headline)
