@@ -30,6 +30,14 @@ struct CustomNotesSection: View {
                     .frame(minHeight: 120)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 14)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") {
+                                UIApplication.shared.hideKeyboard()
+                            }
+                        }
+                    }
             }
             .cardStyle()
         }

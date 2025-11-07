@@ -20,6 +20,7 @@ struct PersonalInformationView: View {
         ZStack {
             AppColors.backgroundGradient(for: colorScheme)
                 .ignoresSafeArea()
+                .dismissKeyboardOnTap()
 
             VStack(spacing: 0) {
                 HeaderView(title: "Create Your Message", currentStep: 0)
@@ -78,6 +79,10 @@ struct RecipientNameSection: View {
                 .padding(.horizontal, 24)
                 .padding(.vertical, 18)
                 .cardStyle()
+                .submitLabel(.done)
+                .onSubmit {
+                    UIApplication.shared.hideKeyboard()
+                }
         }
     }
 }

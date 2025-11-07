@@ -26,6 +26,7 @@ struct MessageThemeView: View {
         ZStack {
             AppColors.backgroundGradient(for: colorScheme)
                 .ignoresSafeArea()
+                .dismissKeyboardOnTap()
 
             VStack(spacing: 0) {
                 HeaderView(title: "What's the vibe?", currentStep: 1)
