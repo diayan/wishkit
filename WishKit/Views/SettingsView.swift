@@ -198,7 +198,7 @@ struct SettingsView: View {
 
     private func sendFeedback() {
         HapticManager.medium()
-        if let url = URL(string: "mailto:support@wishkit.app?subject=WishKit%20Feedback") {
+        if let url = URL(string: "mailto:diayansiat@gmail.com?subject=WishKit%20Feedback") {
             UIApplication.shared.open(url)
         }
     }
