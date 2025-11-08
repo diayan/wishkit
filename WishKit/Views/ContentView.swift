@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var selectedTab: Int = 0
     @State private var navigationPath = NavigationPath()
     @State private var showNotificationPermission = false
+    @State private var showOnboarding = false
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -48,7 +49,11 @@ struct ContentView: View {
         .environment(messageState)
         .onAppear {
             messageState.setModelContext(modelContext)
+            checkOnboarding()
             checkNotificationPermission()
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView()
         }
         .sheet(isPresented: $showNotificationPermission) {
             NotificationPermissionView { granted in
@@ -58,6 +63,14 @@ struct ContentView: View {
                     print("ℹ️ User declined notifications")
                 }
             }
+        }
+    }
+
+    /// Check if user has completed onboarding
+    private func checkOnboarding() {
+        let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+        if !hasCompletedOnboarding {
+            showOnboarding = true
         }
     }
 

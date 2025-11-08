@@ -33,19 +33,18 @@
 		B28B78322EB3D5D900591749 /* Exceptions for "WishKit" folder in "WishKitTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				GeneratedMessageView.swift,
-				MessageHistoryView.swift,
-				MessageThemeView.swift,
-				PersonalInformationView.swift,
-				RoastMeView.swift,
+				Views/GeneratedMessageView.swift,
+				Views/MessageHistoryView.swift,
+				Views/MessageThemeView.swift,
+				Views/PersonalInformationView.swift,
 			);
 			target = B28B78112EB3D41B00591749 /* WishKitTests */;
 		};
 		B2D7C5082EB648B20069F457 /* Exceptions for "WishKit" folder in "WishKitUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				GeneratedMessageView.swift,
-				MessageHistoryView.swift,
+				Views/GeneratedMessageView.swift,
+				Views/MessageHistoryView.swift,
 			);
 			target = B28B781B2EB3D41B00591749 /* WishKitUITests */;
 		};
