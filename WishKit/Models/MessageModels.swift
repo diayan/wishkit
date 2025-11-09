@@ -60,6 +60,7 @@ enum Theme: Equatable {
     case show
     case superhero
     case comic
+    case song
     case custom
 
     var promptText: String {
@@ -71,6 +72,7 @@ enum Theme: Equatable {
         case .show: return "What's the show?"
         case .superhero: return "Who's the superhero?"
         case .comic: return "what is the comic"
+        case .song: return "What is the song?"
         case .custom: return "What's the inspiration?"
         }
     }
@@ -84,6 +86,7 @@ enum Theme: Equatable {
         case .show: return "Enter the name of the show"
         case .superhero: return "Enter the superhero name"
         case .comic: return "Enter the name of the comic"
+        case .song: return "Enter the song title"
         case .custom: return "Enter your custom inspiration"
         }
     }

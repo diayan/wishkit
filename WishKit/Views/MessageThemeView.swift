@@ -35,6 +35,7 @@ struct MessageThemeView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 40) {
                         ThemeSelectionSection(
+                            includeTheme: bindableState.includeTheme,
                             selectedTheme: bindableState.selectedTheme,
                             themeName: bindableState.themeName
                         )

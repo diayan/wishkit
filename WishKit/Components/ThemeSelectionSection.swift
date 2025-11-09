@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ThemeSelectionSection: View {
+    @Binding var includeTheme: Bool
     @Binding var selectedTheme: Theme?
     @Binding var themeName: String
     @Environment(\.colorScheme) private var colorScheme
@@ -20,13 +21,39 @@ struct ThemeSelectionSection: View {
         (.show, "film.fill", "Show", .purple),
         (.superhero, "bolt.fill", "Superhero", .green),
         (.comic, "bolt.fill", "Comic", .pink),
+        (.song, "music.note", "Song", .indigo),
         (.custom, "sparkles", "Custom", .teal)
     ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            VStack(alignment: .leading, spacing: 20) {
-                SectionTitle("Choose a theme for your message")
+            // Include Theme Toggle
+            HStack {
+                Text("Include theme")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                Toggle("", isOn: $includeTheme)
+                    .labelsHidden()
+                    .tint(.orange)
+                    .onChange(of: includeTheme) { oldValue, newValue in
+                        // Clear theme selection when toggle is turned off
+                        if !newValue {
+                            selectedTheme = nil
+                            themeName = ""
+                        }
+                    }
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 18)
+            .cardStyle()
+
+            // Theme Selection (only show when toggle is ON)
+            if includeTheme {
+                VStack(alignment: .leading, spacing: 20) {
+                    SectionTitle("Choose a theme for your message")
 
                 VStack(spacing: 20) {
                     HStack(spacing: 8) {
@@ -64,13 +91,13 @@ struct ThemeSelectionSection: View {
                         Spacer().frame(maxWidth: .infinity)
                     }
                 }
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-            .cardStyle()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
+                .cardStyle()
 
-            // Conditional TextField
-            if let theme = selectedTheme {
+                // Conditional TextField
+                if let theme = selectedTheme {
                 VStack(alignment: .leading, spacing: 16) {
                     SectionTitle(theme.promptText)
 
@@ -88,8 +115,9 @@ struct ThemeSelectionSection: View {
                         .onSubmit {
                             UIApplication.shared.hideKeyboard()
                         }
+                    }
+                    .transition(.scale(scale: 0.95).combined(with: .opacity))
                 }
-                .transition(.scale(scale: 0.95).combined(with: .opacity))
             }
         }
     }

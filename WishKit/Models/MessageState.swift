@@ -20,6 +20,7 @@ class MessageState {
     var selectedRelationship: Relationship? = nil
 
     // MARK: - Theme & Preferences
+    var includeTheme: Bool = false
     var selectedTheme: Theme? = nil
     var themeName: String = ""
     var messageLength: MessageLength? = nil
@@ -46,10 +47,9 @@ class MessageState {
     }
 
     var canGenerateMessage: Bool {
-        selectedTheme != nil &&
-        messageLength != nil &&
-        !themeName.isEmpty &&
-        !isGenerating
+        // Theme is optional based on toggle
+        let themeValid = !includeTheme || (selectedTheme != nil && !themeName.isEmpty)
+        return messageLength != nil && themeValid && !isGenerating
     }
 
     // MARK: - Actions
@@ -61,7 +61,6 @@ class MessageState {
     func generateMessage() async {
         guard canGenerateMessage,
               let occasion = selectedOccasion,
-              let themeType = selectedTheme,
               let messageLength = messageLength else {
             return
         }
@@ -74,8 +73,8 @@ class MessageState {
                 recipientName: recipientName,
                 occasion: occasion,
                 relationship: selectedRelationship,
-                themeType: themeType,
-                theme: themeName,
+                themeType: includeTheme ? selectedTheme : nil,
+                theme: includeTheme ? themeName : nil,
                 messageLength: messageLength,
                 includeEmojis: includeEmojis,
                 customNotes: customNotes.isEmpty ? nil : customNotes
@@ -128,6 +127,7 @@ class MessageState {
         recipientName = ""
         selectedOccasion = nil
         selectedRelationship = nil
+        includeTheme = false
         selectedTheme = nil
         themeName = ""
         messageLength = nil
@@ -139,6 +139,7 @@ class MessageState {
     }
 
     func resetThemeSelection() {
+        includeTheme = false
         selectedTheme = nil
         themeName = ""
         messageLength = nil
