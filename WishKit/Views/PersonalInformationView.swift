@@ -118,7 +118,7 @@ struct OccasionSelectionSection: View {
         (.newBaby, "figure.2.and.child.holdinghands", "New Baby", .green),
         (.christmas, "tree.fill", "Christmas", .green),
         (.newYear, "party.popper.fill", "New Year", .orange),
-        (.justBecause, "face.smiling.fill", "Other", .black)
+        (.justBecause, "face.smiling.fill", "Other", .gray)
     ]
 
     var body: some View {
@@ -150,7 +150,7 @@ struct RelationshipSelectionSection: View {
         (.partner, "heart.circle.fill", "Partner", .pink),
         (.mentor, "person.crop.circle.badge.checkmark", "Mentor", .teal),
         (.acquaintance, "person.fill", "Acquaintance", .gray),
-        (.other, "ellipsis.circle.fill", "Other", .gray)
+        (.other, "ellipsis.circle.fill", "Other", .mint)
     ]
 
     var body: some View {
@@ -179,9 +179,6 @@ struct ContinueButton: View {
         NavigationLink(value: NavigationDestination.messageTheme) {
             HStack(spacing: 12) {
                 Text("Continue")
-                    .font(.headline)
-
-                Image(systemName: "arrow.right")
                     .font(.headline)
             }
             .foregroundColor(.white)
