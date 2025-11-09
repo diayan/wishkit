@@ -14,9 +14,25 @@ struct ContentView: View {
     @State private var navigationPath = NavigationPath()
     @State private var showNotificationPermission = false
     @State private var showOnboarding = false
+    @State private var showLaunchScreen = true
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
+        ZStack {
+            // Main App Content
+            mainContent
+                .opacity(showLaunchScreen ? 0 : 1)
+
+            // Launch Screen
+            if showLaunchScreen {
+                LaunchScreen(isActive: $showLaunchScreen)
+                    .transition(.opacity)
+                    .zIndex(1)
+            }
+        }
+    }
+
+    private var mainContent: some View {
         TabView(selection: $selectedTab) {
             NavigationStack(path: $navigationPath) {
                 PersonalInformationView()

@@ -22,47 +22,74 @@ struct SelectionButton: View {
         }) {
             VStack(spacing: 10) {
                 ZStack {
+                    // Background circle with better dark mode support
                     Circle()
-                        .fill(isSelected ? color.opacity(0.2) : Color.white.opacity(colorScheme == .dark ? 0.9 : 1.0))
+                        .fill(
+                            colorScheme == .dark
+                                ? (isSelected
+                                    ? color.opacity(0.25)
+                                    : color.opacity(0.08))
+                                : (isSelected
+                                    ? color.opacity(0.2)
+                                    : Color.white)
+                        )
                         .frame(width: 72, height: 72)
-                        .shadow(
-                            color: Color.black.opacity(colorScheme == .dark ? 0.4 : 0.2),
-                            radius: isSelected ? 10 : 8,
-                            x: 0,
-                            y: isSelected ? 6 : 4
+
+                    // Subtle border for definition
+                    Circle()
+                        .stroke(
+                            colorScheme == .dark
+                                ? (isSelected
+                                    ? color.opacity(0.5)
+                                    : color.opacity(0.15))
+                                : (isSelected
+                                    ? color.opacity(0.3)
+                                    : Color.clear),
+                            lineWidth: isSelected ? 2 : 1
                         )
-                        .shadow(
-                            color: isSelected ? color.opacity(colorScheme == .dark ? 0.7 : 0.6) : Color.clear,
-                            radius: isSelected ? 16 : 0,
-                            x: 0,
-                            y: 0
-                        )
+                        .frame(width: 72, height: 72)
 
                     Image(systemName: icon)
                         .font(.title3)
-                        .foregroundColor(color)
+                        .foregroundColor(isSelected ? color : (colorScheme == .dark ? color.opacity(0.7) : color))
                 }
+                .shadow(
+                    color: Color.black.opacity(colorScheme == .dark ? 0.3 : 0.15),
+                    radius: isSelected ? 8 : 6,
+                    x: 0,
+                    y: isSelected ? 4 : 3
+                )
+                .shadow(
+                    color: isSelected ? color.opacity(colorScheme == .dark ? 0.6 : 0.5) : Color.clear,
+                    radius: isSelected ? 20 : 0,
+                    x: 0,
+                    y: 0
+                )
                 .background(
                     Circle()
                         .fill(
                             RadialGradient(
                                 gradient: Gradient(colors: [
-                                    color.opacity(colorScheme == .dark ? 0.5 : 0.4),
+                                    color.opacity(colorScheme == .dark ? 0.4 : 0.35),
                                     color.opacity(0.0)
                                 ]),
                                 center: .center,
                                 startRadius: 20,
-                                endRadius: colorScheme == .dark ? 50 : 45
+                                endRadius: colorScheme == .dark ? 55 : 45
                             )
                         )
-                        .frame(width: 90, height: 90)
+                        .frame(width: 100, height: 100)
                         .opacity(isSelected ? 1 : 0)
                 )
 
                 Text(label)
                     .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(isSelected ? color : .secondary)
+                    .fontWeight(isSelected ? .semibold : .medium)
+                    .foregroundColor(
+                        isSelected
+                            ? color
+                            : (colorScheme == .dark ? .secondary.opacity(0.8) : .secondary)
+                    )
                     .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
