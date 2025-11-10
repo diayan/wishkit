@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var showNotificationPermission = false
     @State private var showOnboarding = false
     @State private var showLaunchScreen = true
+    @State private var appearanceManager = AppearanceManager.shared
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -22,12 +23,14 @@ struct ContentView: View {
             // Main App Content
             mainContent
                 .opacity(showLaunchScreen ? 0 : 1)
+                .preferredColorScheme(appearanceManager.currentColorScheme)
 
             // Launch Screen
             if showLaunchScreen {
                 LaunchScreen(isActive: $showLaunchScreen)
                     .transition(.opacity)
                     .zIndex(1)
+                    .preferredColorScheme(appearanceManager.currentColorScheme)
             }
         }
     }
