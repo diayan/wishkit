@@ -58,16 +58,22 @@ struct CardStyleModifier: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
 
     func body(content: Content) -> some View {
-        content
-            .background(
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(AppColors.cardGradient(for: colorScheme))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 24)
-                            .stroke(AppColors.cardBorderColor(for: colorScheme), lineWidth: 1.5)
-                    )
-                    .shadow(color: AppColors.cardShadow(for: colorScheme), radius: 16, x: 0, y: 6)
-            )
+        
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect(.clear, in: .rect(cornerRadius: 24))
+        } else {
+            content
+                .background(
+                    RoundedRectangle(cornerRadius: 24)
+                        .fill(AppColors.cardGradient(for: colorScheme))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(AppColors.cardBorderColor(for: colorScheme), lineWidth: 1.5)
+                        )
+                        .shadow(color: AppColors.cardShadow(for: colorScheme), radius: 16, x: 0, y: 6)
+                )
+        }
     }
 }
 
