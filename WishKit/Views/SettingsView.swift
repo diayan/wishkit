@@ -12,9 +12,12 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @State private var appearanceManager = AppearanceManager.shared
+    @State private var subscriptionManager = SubscriptionManager.shared
     @State private var notificationsEnabled = false
     @State private var isCheckingPermission = true
     @State private var isAnimated = false
+    @State private var showCustomerCenter = false
+    @State private var showPaywall = false
 
     var body: some View {
         ZStack {
@@ -30,9 +33,7 @@ struct SettingsView: View {
                         HapticManager.light()
                         dismiss()
                     }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.largeTitle)
-                            .foregroundColor(.secondary)
+                        dismissButton
                     }
                 }
                 .padding(.horizontal, 24)
@@ -84,6 +85,27 @@ struct SettingsView: View {
                                 subtitle: "Choose your preferred theme",
                                 selectedMode: $appearanceManager.selectedMode
                             )
+
+                            // Subscription Management
+                            if subscriptionManager.isSubscribed {
+                                SettingsActionCard(
+                                    icon: "crown.fill",
+                                    iconColor: .purple,
+                                    title: "Manage Subscription",
+                                    subtitle: "View and manage your Wishly Pro subscription"
+                                ) {
+                                    showCustomerCenter = true
+                                }
+                            } else {
+                                SettingsActionCard(
+                                    icon: "crown.fill",
+                                    iconColor: .orange,
+                                    title: "Subscribe to Wishly Pro",
+                                    subtitle: "Unlock unlimited messages and all themes"
+                                ) {
+                                    showPaywall = true
+                                }
+                            }
 
                             SettingsActionCard(
                                 icon: "envelope.fill",
@@ -154,6 +176,14 @@ struct SettingsView: View {
             }
         }
         .preferredColorScheme(appearanceManager.currentColorScheme)
+        .sheet(isPresented: $showCustomerCenter) {
+            CustomerCenterView()
+        }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView {
+                showPaywall = false
+            }
+        }
         .onAppear {
             checkNotificationStatus()
             withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
@@ -246,6 +276,27 @@ struct SettingsView: View {
     }
 }
 
+@ViewBuilder
+private var dismissButton: some View {
+    if #available(iOS 26.0, *) {
+        Image(systemName: "xmark")
+            .font(.title3)
+            .foregroundColor(.secondary)
+            .padding(12)
+            .background(Circle().fill(.clear))
+            .glassEffect(.regular.interactive(), in: .circle)
+    } else {
+        Image(systemName: "xmark")
+            .font(.title3)
+            .foregroundColor(.secondary)
+            .padding(12)
+            .background(
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+            )
+    }
+}
 // MARK: - Settings Toggle Card
 
 struct SettingsToggleCard: View {

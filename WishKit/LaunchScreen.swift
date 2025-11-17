@@ -74,24 +74,26 @@ struct LaunchScreen: View {
                 .scaleEffect(scale)
                 .opacity(opacity)
 
-                // App Name
-                Text("WishKit")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.orange, .pink],
-                            startPoint: .leading,
-                            endPoint: .trailing
+                VStack(spacing: 8){
+                    // App Name
+                    Text("Wishly")
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.orange, .pink],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
-                    )
-                    .opacity(opacity)
-                    .scaleEffect(scale)
+                        .opacity(opacity)
+                        .scaleEffect(scale)
 
-                // Tagline
-                Text("Make Every Message Magical")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .opacity(opacity * 0.8)
+                    // Tagline
+                    Text("Make Every Occasion A Memory")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .opacity(opacity * 0.8)
+                }
             }
         }
         .onAppear {
