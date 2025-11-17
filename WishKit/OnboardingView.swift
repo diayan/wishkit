@@ -15,6 +15,7 @@ struct OnboardingView: View {
     @State private var showContent: Bool = false
     @State private var iconRotation: Double = 0
     @State private var iconScale: Double = 1.0
+    @State private var showPaywall: Bool = false
 
     private let totalPages = 4
 
@@ -60,6 +61,11 @@ struct OnboardingView: View {
         .onAppear {
             startAnimation()
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView {
+                completeOnboarding()
+            }
+        }
     }
 
     // MARK: - Navigation
@@ -75,7 +81,8 @@ struct OnboardingView: View {
                 startAnimation()
             }
         } else {
-            completeOnboarding()
+            // Show paywall after last onboarding screen
+            showPaywall = true
         }
     }
 

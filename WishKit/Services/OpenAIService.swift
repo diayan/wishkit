@@ -62,8 +62,8 @@ class OpenAIService {
         recipientName: String,
         occasion: Occasion,
         relationship: Relationship?,
-        themeType: Theme,
-        theme: String,
+        themeType: Theme?,
+        theme: String?,
         messageLength: MessageLength,
         includeEmojis: Bool,
         customNotes: String?
@@ -86,7 +86,7 @@ class OpenAIService {
             messages: [
                 OpenAIRequest.Message(
                     role: "system",
-                    content: "You are a creative message writer who crafts personalized messages inspired by themes users provide. Create original, heartfelt content that captures the spirit and feeling of the theme. Avoid direct quotes or copying copyrighted dialogue verbatim."
+                    content: "You are a creative message writer who crafts personalized, heartfelt messages for special occasions. When a theme is provided, capture its spirit creatively while creating original content. When no theme is given, write genuine, sincere messages from the heart. Avoid direct quotes or copying copyrighted dialogue verbatim."
                 ),
                 OpenAIRequest.Message(
                     role: "user",
@@ -107,8 +107,8 @@ class OpenAIService {
         recipientName: String,
         occasion: Occasion,
         relationship: Relationship?,
-        themeType: Theme,
-        theme: String,
+        themeType: Theme?,
+        theme: String?,
         messageLength: MessageLength,
         includeEmojis: Bool,
         customNotes: String?
@@ -122,7 +122,13 @@ class OpenAIService {
         }
 
         prompt += ".\n\n"
-        prompt += "The message should be inspired by \(theme) (a \(themeType.categoryDescription)). Capture the essence and feeling of this theme in the message.\n"
+
+        // Handle themed vs. classic messages
+        if let themeType = themeType, let theme = theme {
+            prompt += "The message should be inspired by \(theme) (a \(themeType.categoryDescription)). Capture the essence and feeling of this theme in the message.\n"
+        } else {
+            prompt += "Create a classic, heartfelt message that is genuine and personal.\n"
+        }
 
         if includeEmojis {
             prompt += "Include relevant emojis to make it more expressive.\n"
@@ -134,19 +140,22 @@ class OpenAIService {
             prompt += "Additional context: \(notes)\n"
         }
 
-        prompt += """
-        \n
-        Requirements:
-        - Make it personal and heartfelt
-        - Capture the essence and feeling of \(theme) in the message
-        - Create original content - avoid direct quotes or copying dialogue verbatim
-        - Reference the theme naturally and creatively
-        - Keep the tone appropriate for a \(occasion.displayName.lowercased()) message
-        - Make it feel genuine and sincere
-        - Don't be overly formal unless it's appropriate for the occasion
+        prompt += "\n\nRequirements:\n"
+        prompt += "- Make it personal and heartfelt\n"
 
-        Write only the message itself, without any preamble or explanation.
-        """
+        if let theme = theme {
+            prompt += "- Capture the essence and feeling of \(theme) in the message\n"
+            prompt += "- Create original content - avoid direct quotes or copying dialogue verbatim\n"
+            prompt += "- Reference the theme naturally and creatively\n"
+        } else {
+            prompt += "- Write a genuine, sincere message from the heart\n"
+            prompt += "- Focus on the relationship and the occasion\n"
+        }
+
+        prompt += "- Keep the tone appropriate for a \(occasion.displayName.lowercased()) message\n"
+        prompt += "- Make it feel genuine and sincere\n"
+        prompt += "- Don't be overly formal unless it's appropriate for the occasion\n"
+        prompt += "\nWrite only the message itself, without any preamble or explanation."
 
         return prompt
     }
@@ -234,6 +243,7 @@ extension Theme {
         case .show: return "TV show"
         case .superhero: return "superhero"
         case .comic: return "comic"
+        case .song: return "song"
         case .custom: return "inspiration"
         }
     }

@@ -12,11 +12,13 @@ struct MessageThemeView: View {
     @Binding var selectedTab: Int
 
     @Environment(MessageState.self) private var messageState
+    @State private var subscriptionManager = SubscriptionManager.shared
     @State private var isButtonAnimating: Bool = false
     @State private var showGeneratedMessage: Bool = false
     @State private var isAnimated: Bool = false
     @State private var showErrorAlert: Bool = false
     @State private var showSettings = false
+    @State private var showPaywall = false
     @Environment(\.colorScheme) private var colorScheme
 
     private var bindableState: Bindable<MessageState> {
@@ -35,6 +37,7 @@ struct MessageThemeView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 40) {
                         ThemeSelectionSection(
+                            includeTheme: bindableState.includeTheme,
                             selectedTheme: bindableState.selectedTheme,
                             themeName: bindableState.themeName
                         )
@@ -53,19 +56,37 @@ struct MessageThemeView: View {
                             .opacity(isAnimated ? 1 : 0)
                             .offset(y: isAnimated ? 0 : 20)
 
+                        // Trial countdown banner (only show if not subscribed and within grace period)
+                        if !subscriptionManager.isSubscribed && subscriptionManager.isWithinGracePeriod {
+                            TrialBanner(daysRemaining: subscriptionManager.daysRemainingInTrial) {
+                                HapticManager.light()
+                                showPaywall = true
+                            }
+                            .opacity(isAnimated ? 1 : 0)
+                            .offset(y: isAnimated ? 0 : 20)
+                        }
+
                         GenerateMessageButton(
                             isAnimating: $isButtonAnimating,
                             isEnabled: messageState.canGenerateMessage,
                             isGenerating: messageState.isGenerating
                         ) {
-                            Task {
-                                await messageState.generateMessage()
-                                if messageState.generationError != nil {
-                                    HapticManager.error()
-                                    showErrorAlert = true
-                                } else if !messageState.generatedMessage.isEmpty {
-                                    HapticManager.success()
-                                    showGeneratedMessage = true
+                            // Check if user has access (subscribed OR within 3-day grace period)
+                            if !subscriptionManager.hasAccess {
+                                HapticManager.warning()
+                                showPaywall = true
+                            } else {
+                                Task {
+                                    await messageState.generateMessage()
+                                    if messageState.generationError != nil {
+                                        HapticManager.error()
+                                        showErrorAlert = true
+                                    } else if !messageState.generatedMessage.isEmpty {
+                                        HapticManager.success()
+                                        showGeneratedMessage = true
+                                        // Track successful generation and potentially request review
+                                        RatingManager.shared.messageGeneratedSuccessfully()
+                                    }
                                 }
                             }
                         }
@@ -96,6 +117,11 @@ struct MessageThemeView: View {
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView {
+                showPaywall = false
+            }
+        }
         .onAppear {
             withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
                 isAnimated = true
@@ -124,6 +150,8 @@ struct MessageThemeView: View {
                     await messageState.generateMessage()
                     if messageState.generationError == nil && !messageState.generatedMessage.isEmpty {
                         showGeneratedMessage = true
+                        // Track successful generation and potentially request review
+                        RatingManager.shared.messageGeneratedSuccessfully()
                     } else if messageState.generationError != nil {
                         showErrorAlert = true
                     }

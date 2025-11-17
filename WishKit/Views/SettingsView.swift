@@ -11,9 +11,13 @@ import UserNotifications
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+    @State private var appearanceManager = AppearanceManager.shared
+    @State private var subscriptionManager = SubscriptionManager.shared
     @State private var notificationsEnabled = false
     @State private var isCheckingPermission = true
     @State private var isAnimated = false
+    @State private var showCustomerCenter = false
+    @State private var showPaywall = false
 
     var body: some View {
         ZStack {
@@ -29,9 +33,7 @@ struct SettingsView: View {
                         HapticManager.light()
                         dismiss()
                     }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.largeTitle)
-                            .foregroundColor(.secondary)
+                        dismissButton
                     }
                 }
                 .padding(.horizontal, 24)
@@ -75,6 +77,36 @@ struct SettingsView: View {
                                 rateApp()
                             }
 
+                            // Appearance Picker
+                            AppearancePickerCard(
+                                icon: "paintbrush.fill",
+                                iconColor: .indigo,
+                                title: "Appearance",
+                                subtitle: "Choose your preferred theme",
+                                selectedMode: $appearanceManager.selectedMode
+                            )
+
+                            // Subscription Management
+                            if subscriptionManager.isSubscribed {
+                                SettingsActionCard(
+                                    icon: "crown.fill",
+                                    iconColor: .purple,
+                                    title: "Manage Subscription",
+                                    subtitle: "View and manage your Wishly Pro subscription"
+                                ) {
+                                    showCustomerCenter = true
+                                }
+                            } else {
+                                SettingsActionCard(
+                                    icon: "crown.fill",
+                                    iconColor: .orange,
+                                    title: "Subscribe to Wishly Pro",
+                                    subtitle: "Unlock unlimited messages and all themes"
+                                ) {
+                                    showPaywall = true
+                                }
+                            }
+
                             SettingsActionCard(
                                 icon: "envelope.fill",
                                 iconColor: .red,
@@ -83,6 +115,7 @@ struct SettingsView: View {
                             ) {
                                 sendFeedback()
                             }
+                            
                         }
                         .opacity(isAnimated ? 1 : 0)
                         .offset(y: isAnimated ? 0 : 20)
@@ -140,6 +173,15 @@ struct SettingsView: View {
                     .padding(.horizontal, 24)
                     .padding(.top, 20)
                 }
+            }
+        }
+        .preferredColorScheme(appearanceManager.currentColorScheme)
+        .sheet(isPresented: $showCustomerCenter) {
+            CustomerCenterView()
+        }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView {
+                showPaywall = false
             }
         }
         .onAppear {
@@ -234,6 +276,27 @@ struct SettingsView: View {
     }
 }
 
+@ViewBuilder
+private var dismissButton: some View {
+    if #available(iOS 26.0, *) {
+        Image(systemName: "xmark")
+            .font(.title3)
+            .foregroundColor(.secondary)
+            .padding(12)
+            .background(Circle().fill(.clear))
+            .glassEffect(.regular.interactive(), in: .circle)
+    } else {
+        Image(systemName: "xmark")
+            .font(.title3)
+            .foregroundColor(.secondary)
+            .padding(12)
+            .background(
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+            )
+    }
+}
 // MARK: - Settings Toggle Card
 
 struct SettingsToggleCard: View {
@@ -327,6 +390,82 @@ struct SettingsActionCard: View {
             .cardStyle()
         }
         .buttonPressAnimation()
+    }
+}
+
+// MARK: - Appearance Picker Card
+
+struct AppearancePickerCard: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let subtitle: String
+    @Binding var selectedMode: AppearanceMode
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 16) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(iconColor)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+            }
+
+            // Appearance Mode Picker
+            HStack(spacing: 12) {
+                ForEach(AppearanceMode.allCases) { mode in
+                    Button(action: {
+                        HapticManager.selection()
+                        selectedMode = mode
+                    }) {
+                        VStack(spacing: 8) {
+                            Image(systemName: mode.icon)
+                                .font(.title2)
+                                .foregroundColor(selectedMode == mode ? .orange : .secondary)
+
+                            Text(mode.rawValue)
+                                .font(.caption)
+                                .fontWeight(selectedMode == mode ? .semibold : .regular)
+                                .foregroundColor(selectedMode == mode ? .orange : .secondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(selectedMode == mode
+                                      ? Color.orange.opacity(0.15)
+                                      : (colorScheme == .dark
+                                         ? Color.white.opacity(0.05)
+                                         : Color.gray.opacity(0.1)))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(selectedMode == mode
+                                        ? Color.orange.opacity(0.5)
+                                        : Color.clear,
+                                        lineWidth: 2)
+                        )
+                    }
+                    .buttonPressAnimation()
+                }
+            }
+        }
+        .padding(20)
+        .cardStyle()
     }
 }
 

@@ -13,6 +13,9 @@ struct WishKitApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        // Configure RevenueCat
+        SubscriptionManager.shared.configure()
+
         // Track app opens
         NotificationManager.shared.userOpenedApp()
     }

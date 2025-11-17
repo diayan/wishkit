@@ -101,8 +101,7 @@ struct MessageHistoryCard: View {
                         )
                 }
             }
-            .padding(28)
-            .cardStyle()
+            .modifier(CardPaddingModifier())
         }
         .cardTapAnimation()
         .sheet(isPresented: $showMessageDetail) {
@@ -115,6 +114,24 @@ struct MessageHistoryCard: View {
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(28)
+        }
+    }
+}
+
+// MARK: - Card Padding Modifier
+
+struct CardPaddingModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            // iOS 26+: Apply card style first, then padding
+            content
+                .cardStyle()
+                .padding(28)
+        } else {
+            // iOS 25 and below: Apply padding first, then card style
+            content
+                .padding(28)
+                .cardStyle()
         }
     }
 }

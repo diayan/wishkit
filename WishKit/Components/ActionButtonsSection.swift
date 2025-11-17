@@ -74,35 +74,7 @@ struct CircularActionButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    color.opacity(colorScheme == .dark ? 0.3 : 0.2),
-                                    color.opacity(colorScheme == .dark ? 0.2 : 0.15)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 72, height: 72)
-                        .overlay(
-                            Circle()
-                                .stroke(color.opacity(colorScheme == .dark ? 0.5 : 0.4), lineWidth: 2)
-                        )
-                        .shadow(
-                            color: color.opacity(colorScheme == .dark ? 0.4 : 0.3),
-                            radius: 12,
-                            x: 0,
-                            y: 6
-                        )
-
-                    Image(systemName: icon)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(color)
-                }
+                circleIcon
 
                 Text(label)
                     .font(.caption)
@@ -115,5 +87,52 @@ struct CircularActionButton: View {
             .frame(maxWidth: .infinity)
         }
         .buttonPressAnimation()
+    }
+
+    @ViewBuilder
+    private var circleIcon: some View {
+        if #available(iOS 26.0, *) {
+            // Liquid Glass version for iOS 26+
+            ZStack {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(color)
+            }
+            .frame(width: 72, height: 72)
+            .background(Circle().fill(.clear))
+            .glassEffect(.regular.tint(color.opacity(0.2)).interactive(), in: .circle)
+        } else {
+            // Original version for iOS 25 and earlier
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                color.opacity(colorScheme == .dark ? 0.3 : 0.2),
+                                color.opacity(colorScheme == .dark ? 0.2 : 0.15)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 72, height: 72)
+                    .overlay(
+                        Circle()
+                            .stroke(color.opacity(colorScheme == .dark ? 0.5 : 0.4), lineWidth: 2)
+                    )
+                    .shadow(
+                        color: color.opacity(colorScheme == .dark ? 0.4 : 0.3),
+                        radius: 12,
+                        x: 0,
+                        y: 6
+                    )
+
+                Image(systemName: icon)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(color)
+            }
+        }
     }
 }
